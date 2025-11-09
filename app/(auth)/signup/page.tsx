@@ -59,7 +59,7 @@ export default function SignupPage() {
         setOauthLoading(null)
       }
       // Note: If successful, user will be redirected, so no need to reset loading state
-    } catch (err) {
+    } catch {
       setError("An unexpected error occurred. Please try again.")
       setOauthLoading(null)
     }
