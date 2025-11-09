@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useState } from "react"
+import { useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { signup, loginWithOAuth } from "../actions"
+import { signup } from "../actions"
+import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -11,19 +12,18 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Github } from "lucide-react"
 
 export default function SignupPage() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [oauthLoading, setOauthLoading] = useState<string | null>(null)
 
-  // Handle OAuth callback - redirect to proper callback handler
-  useEffect(() => {
-    const code = searchParams.get("code")
-    if (code) {
-      router.push(`/auth/callback?code=${code}`)
-    }
-  }, [searchParams, router])
+  // If OAuth redirected here with a code, immediately forward to callback handler
+  // This must happen before React renders to avoid double-execution in Strict Mode
+  const code = searchParams.get("code")
+  if (code && typeof window !== 'undefined' && !window.location.href.includes('/auth/callback')) {
+    window.location.replace(`/auth/callback?code=${code}`)
+    return <div className="flex items-center justify-center min-h-screen">Redirecting...</div>
+  }
 
   async function handleSubmit(formData: FormData) {
     setLoading(true)
@@ -38,9 +38,30 @@ export default function SignupPage() {
   }
 
   async function handleOAuth(provider: "github" | "google") {
+    // Prevent spam clicking
+    if (oauthLoading !== null) return
+
     setOauthLoading(provider)
     setError(null)
-    await loginWithOAuth(provider)
+
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      })
+
+      if (error) {
+        setError(error.message)
+        setOauthLoading(null)
+      }
+      // Note: If successful, user will be redirected, so no need to reset loading state
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again.")
+      setOauthLoading(null)
+    }
   }
 
   return (
