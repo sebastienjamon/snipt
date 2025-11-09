@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { login, loginWithOAuth } from "../actions"
 import { Button } from "@/components/ui/button"
@@ -10,9 +11,19 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Github } from "lucide-react"
 
 export default function LoginPage() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [oauthLoading, setOauthLoading] = useState<string | null>(null)
+
+  // Handle OAuth callback - redirect to proper callback handler
+  useEffect(() => {
+    const code = searchParams.get("code")
+    if (code) {
+      router.push(`/auth/callback?code=${code}`)
+    }
+  }, [searchParams, router])
 
   async function handleSubmit(formData: FormData) {
     setLoading(true)
