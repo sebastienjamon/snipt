@@ -1,10 +1,25 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { Logo } from "@/components/ui/logo"
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-b from-background to-secondary">
-      <div className="max-w-4xl mx-auto text-center space-y-8">
+    <main className="min-h-screen flex flex-col bg-gradient-to-b from-background to-secondary">
+      <header className="border-b bg-background/50 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <Logo href="/" />
+          <div className="flex gap-2">
+            <Link href="/login">
+              <Button variant="ghost">Sign In</Button>
+            </Link>
+            <Link href="/signup">
+              <Button>Get Started</Button>
+            </Link>
+          </div>
+        </div>
+      </header>
+      <div className="flex-1 flex items-center justify-center p-8">
+        <div className="max-w-4xl mx-auto text-center space-y-8">
         <h1 className="text-6xl font-bold tracking-tight">
           Code Snippets That <span className="text-primary">Remember</span>
         </h1>
@@ -18,11 +33,6 @@ export default function Home() {
           <Link href="/signup">
             <Button size="lg" className="text-lg px-8 py-6">
               Get Started
-            </Button>
-          </Link>
-          <Link href="/login">
-            <Button size="lg" variant="outline" className="text-lg px-8 py-6">
-              Sign In
             </Button>
           </Link>
         </div>
@@ -49,6 +59,7 @@ export default function Home() {
             </p>
           </div>
         </div>
+      </div>
       </div>
     </main>
   )

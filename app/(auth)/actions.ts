@@ -85,3 +85,31 @@ export async function signOut() {
   revalidatePath("/", "layout")
   redirect("/")
 }
+
+export async function loginWithOAuth(provider: "github" | "google") {
+  const supabase = await createClient()
+
+  // Get the current origin from headers
+  const origin = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo: `${origin}/auth/callback`,
+      skipBrowserRedirect: false,
+    },
+  })
+
+  if (error) {
+    console.error("[OAuth] Error:", error)
+    return {
+      error: error.message,
+    }
+  }
+
+  console.log("[OAuth] Redirect URL:", data.url)
+
+  if (data.url) {
+    redirect(data.url)
+  }
+}

@@ -1,0 +1,11 @@
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Code brackets <> -->
+  <text x="10" y="42" font-family="monospace" font-size="32" font-weight="bold" fill="hsl(262.1 83.3% 57.8%)">
+    &lt;/&gt;
+  </text>
+
+  <!-- Snipt text -->
+  <text x="80" y="42" font-family="system-ui, -apple-system" font-size="28" font-weight="bold" fill="currentColor">
+    Snipt
+  </text>
+</svg>

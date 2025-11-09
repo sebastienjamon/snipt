@@ -4,6 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Code2, Home, Settings, Key, Users } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { Logo } from "@/components/ui/logo"
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
@@ -24,10 +25,7 @@ export function Sidebar({ snippetCount = 0 }: SidebarProps) {
   return (
     <div className="flex h-full w-64 flex-col border-r bg-card">
       <div className="flex h-16 items-center border-b px-6">
-        <Link href="/dashboard" className="flex items-center space-x-2">
-          <Code2 className="h-6 w-6" />
-          <span className="text-xl font-bold">Snipt</span>
-        </Link>
+        <Logo href="/dashboard" />
       </div>
 
       <nav className="flex-1 space-y-1 p-4">
