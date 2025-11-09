@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js"
+import type { User } from "@supabase/supabase-js"
 import bcrypt from "bcryptjs"
 
 export async function validateApiKey(
@@ -54,7 +55,7 @@ export async function validateApiKey(
 
 export async function getUserFromRequest(
   request: Request
-): Promise<{ user: any; source: "session" | "api_key" } | null> {
+): Promise<{ user: User; source: "session" | "api_key" } | null> {
   const { createClient: createServerClient } = await import(
     "@/lib/supabase/server"
   )

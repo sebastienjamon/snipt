@@ -20,7 +20,6 @@ type SidebarProps = {
 
 export function Sidebar({ snippetCount = 0 }: SidebarProps) {
   const pathname = usePathname()
-  const remaining = Math.max(0, 50 - snippetCount)
 
   return (
     <div className="flex h-full w-64 flex-col border-r bg-card">
