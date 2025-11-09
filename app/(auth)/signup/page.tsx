@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { signup } from "../actions"
@@ -17,13 +17,14 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false)
   const [oauthLoading, setOauthLoading] = useState<string | null>(null)
 
-  // If OAuth redirected here with a code, immediately forward to callback handler
-  // This must happen before React renders to avoid double-execution in Strict Mode
-  const code = searchParams.get("code")
-  if (code && typeof window !== 'undefined' && !window.location.href.includes('/auth/callback')) {
-    window.location.replace(`/auth/callback?code=${code}`)
-    return <div className="flex items-center justify-center min-h-screen">Redirecting...</div>
-  }
+  // Handle OAuth redirect - runs after component mounts
+  useEffect(() => {
+    const code = searchParams.get("code")
+    if (code && typeof window !== 'undefined') {
+      // Redirect to callback handler
+      window.location.replace(`/auth/callback?code=${code}`)
+    }
+  }, [searchParams])
 
   async function handleSubmit(formData: FormData) {
     setLoading(true)
