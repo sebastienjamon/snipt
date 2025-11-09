@@ -20,7 +20,9 @@ export default function LoginPage() {
   // Handle OAuth callback - redirect to proper callback handler
   useEffect(() => {
     const code = searchParams.get("code")
+    console.log('[Login] Checking for OAuth code:', code)
     if (code) {
+      console.log('[Login] Redirecting to callback with code:', code)
       router.push(`/auth/callback?code=${code}`)
     }
   }, [searchParams, router])
