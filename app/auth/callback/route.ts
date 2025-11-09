@@ -6,23 +6,36 @@ export async function GET(request: Request) {
   const code = searchParams.get("code")
   const next = searchParams.get("next") ?? "/dashboard"
 
+  console.log("[Callback] Code received:", code ? "yes" : "no")
+  console.log("[Callback] Origin:", origin)
+
   if (code) {
     const supabase = await createClient()
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+
+    console.log("[Callback] Exchange result - Error:", error?.message, "User:", data.user?.email)
 
     if (!error) {
       const forwardedHost = request.headers.get("x-forwarded-host")
       const isLocalEnv = process.env.NODE_ENV === "development"
+
+      let redirectUrl: string
       if (isLocalEnv) {
-        return NextResponse.redirect(`${origin}${next}`)
+        redirectUrl = `${origin}${next}`
       } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}`)
+        redirectUrl = `https://${forwardedHost}${next}`
       } else {
-        return NextResponse.redirect(`${origin}${next}`)
+        redirectUrl = `${origin}${next}`
       }
+
+      console.log("[Callback] Success! Redirecting to:", redirectUrl)
+      return NextResponse.redirect(redirectUrl)
+    } else {
+      console.error("[Callback] Exchange failed:", error)
     }
   }
 
   // Return the user to an error page with some instructions
+  console.log("[Callback] Redirecting to error page")
   return NextResponse.redirect(`${origin}/auth/auth-code-error`)
 }
