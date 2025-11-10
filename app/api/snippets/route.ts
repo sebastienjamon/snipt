@@ -51,7 +51,17 @@ export async function GET(request: Request) {
 
   // Full-text search
   if (query) {
-    queryBuilder = queryBuilder.textSearch("search_vector", query)
+    // Sanitize query for tsquery: split by spaces and join with &
+    // Remove special characters that break tsquery syntax
+    const sanitizedQuery = query
+      .split(/\s+/)
+      .map(word => word.replace(/[^\w\s]/g, ''))
+      .filter(word => word.length > 0)
+      .join(' & ')
+
+    if (sanitizedQuery) {
+      queryBuilder = queryBuilder.textSearch("search_vector", sanitizedQuery)
+    }
   }
 
   const { data: snippets, error } = await queryBuilder
