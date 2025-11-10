@@ -39,7 +39,7 @@ export default async function DashboardLayout({
             <div className="lg:hidden">
               <MobileSidebar snippetCount={snippetCount || 0} />
             </div>
-            <h1 className="text-lg md:text-2xl font-semibold truncate">Dashboard</h1>
+            <h1 className="hidden md:block text-lg md:text-2xl font-semibold truncate">Dashboard</h1>
           </div>
           <UserMenu user={user} />
         </header>
