@@ -152,7 +152,7 @@ export default async function DashboardPage() {
               <div className="space-y-1">
                 <p className="text-sm font-medium">Configure Claude Code</p>
                 <p className="text-sm text-muted-foreground">
-                  Connect your API key to Claude Code via MCP settings
+                  Add your API key to Claude Code MCP settings
                 </p>
               </div>
             </div>
@@ -161,9 +161,9 @@ export default async function DashboardPage() {
                 4
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-medium">Start using your snippets</p>
+                <p className="text-sm font-medium">Start using snippets</p>
                 <p className="text-sm text-muted-foreground">
-                  Claude Code can now search and save snippets automatically
+                  Create and search snippets directly from Claude Code
                 </p>
               </div>
             </div>

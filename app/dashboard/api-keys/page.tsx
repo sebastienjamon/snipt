@@ -293,7 +293,7 @@ export default function ApiKeysPage() {
           <div className="mt-4 p-4 bg-muted rounded-lg">
             <p className="text-sm text-muted-foreground">
               📖 For detailed setup instructions, see the{" "}
-              <a href="/docs/mcp-setup" className="text-primary hover:underline">
+              <a href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                 MCP Setup Guide
               </a>
             </p>
