@@ -156,7 +156,7 @@ export default function ApiKeysPage() {
               <Label htmlFor="keyName">Key Name</Label>
               <Input
                 id="keyName"
-                placeholder="e.g., MacBook Pro, Work Laptop"
+                placeholder="e.g., Claude Code, Codex"
                 value={newKeyName}
                 onChange={(e) => setNewKeyName(e.target.value)}
                 onKeyDown={(e) => {
