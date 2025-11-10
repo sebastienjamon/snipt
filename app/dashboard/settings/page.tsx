@@ -166,30 +166,24 @@ export default function SettingsPage() {
             </Avatar>
 
             <div className="flex-1 space-y-2">
-              <Label htmlFor="avatar" className="cursor-pointer">
-                <div className="flex items-center gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    disabled={uploading}
-                    asChild
-                  >
-                    <span>
-                      {uploading ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Uploading...
-                        </>
-                      ) : (
-                        <>
-                          <Upload className="mr-2 h-4 w-4" />
-                          Upload Photo
-                        </>
-                      )}
-                    </span>
-                  </Button>
-                </div>
-              </Label>
+              <Button
+                type="button"
+                variant="outline"
+                disabled={uploading}
+                onClick={() => document.getElementById("avatar")?.click()}
+              >
+                {uploading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <Upload className="mr-2 h-4 w-4" />
+                    Upload Photo
+                  </>
+                )}
+              </Button>
               <input
                 id="avatar"
                 type="file"
