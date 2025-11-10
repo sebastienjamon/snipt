@@ -128,9 +128,9 @@ export default async function DashboardPage() {
                 1
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-medium">Create your first snippet</p>
+                <p className="text-sm font-medium">Install MCP server</p>
                 <p className="text-sm text-muted-foreground">
-                  Store code snippets that you use frequently
+                  npm install -g @snipt/mcp-server
                 </p>
               </div>
             </div>
@@ -141,7 +141,7 @@ export default async function DashboardPage() {
               <div className="space-y-1">
                 <p className="text-sm font-medium">Generate an API key</p>
                 <p className="text-sm text-muted-foreground">
-                  Connect Claude Code to your snippet vault via MCP
+                  Create a key in the API Keys section
                 </p>
               </div>
             </div>
@@ -150,9 +150,20 @@ export default async function DashboardPage() {
                 3
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-medium">Install MCP server</p>
+                <p className="text-sm font-medium">Configure Claude Code</p>
                 <p className="text-sm text-muted-foreground">
-                  Enable Claude Code to read and write snippets automatically
+                  Connect your API key to Claude Code via MCP settings
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-3">
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
+                4
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm font-medium">Start using your snippets</p>
+                <p className="text-sm text-muted-foreground">
+                  Claude Code can now search and save snippets automatically
                 </p>
               </div>
             </div>
