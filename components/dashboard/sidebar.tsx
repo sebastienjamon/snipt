@@ -2,14 +2,13 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Code2, Home, Settings, Key, Users } from "lucide-react"
+import { Code2, Home, Settings, Key } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Logo } from "@/components/ui/logo"
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
   { name: "Snippets", href: "/dashboard/snippets", icon: Code2 },
-  { name: "Teams", href: "/dashboard/teams", icon: Users },
   { name: "API Keys", href: "/dashboard/api-keys", icon: Key },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ]
@@ -51,14 +50,9 @@ export function Sidebar({ snippetCount = 0 }: SidebarProps) {
       <div className="border-t p-4">
         <div className="rounded-lg bg-muted p-4 text-sm">
           <p className="font-semibold mb-1">Free Plan</p>
-          <p className="text-xs text-muted-foreground mb-2">
+          <p className="text-xs text-muted-foreground">
             {snippetCount} / 50 snippets used
           </p>
-          <Link href="/dashboard/settings/billing">
-            <button className="text-xs text-primary hover:underline">
-              Upgrade to Pro
-            </button>
-          </Link>
         </div>
       </div>
     </div>
