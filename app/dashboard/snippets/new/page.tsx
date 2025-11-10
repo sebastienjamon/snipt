@@ -31,8 +31,8 @@ export default function NewSnippetPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight">Create Snippet</h2>
-        <p className="text-muted-foreground">
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Create Snippet</h2>
+        <p className="text-sm md:text-base text-muted-foreground">
           Add a new code snippet to your vault
         </p>
       </div>

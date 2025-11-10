@@ -136,7 +136,7 @@ export function SnippetForm({ initialData, onSubmit, submitLabel = "Create Snipp
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="language">Language *</Label>
               <select
@@ -179,7 +179,7 @@ export function SnippetForm({ initialData, onSubmit, submitLabel = "Create Snipp
                 }}
                 placeholder="Add tags..."
               />
-              <Button type="button" onClick={addTag} variant="outline">
+              <Button type="button" onClick={addTag} variant="outline" className="shrink-0">
                 Add
               </Button>
             </div>
@@ -248,7 +248,7 @@ export function SnippetForm({ initialData, onSubmit, submitLabel = "Create Snipp
                 }}
                 placeholder="Add a common mistake..."
               />
-              <Button type="button" onClick={addMistake} variant="outline">
+              <Button type="button" onClick={addMistake} variant="outline" className="shrink-0">
                 Add
               </Button>
             </div>
@@ -285,7 +285,7 @@ export function SnippetForm({ initialData, onSubmit, submitLabel = "Create Snipp
                 }}
                 placeholder="Add a prerequisite..."
               />
-              <Button type="button" onClick={addPrerequisite} variant="outline">
+              <Button type="button" onClick={addPrerequisite} variant="outline" className="shrink-0">
                 Add
               </Button>
             </div>
@@ -310,16 +310,17 @@ export function SnippetForm({ initialData, onSubmit, submitLabel = "Create Snipp
         </CardContent>
       </Card>
 
-      <div className="flex justify-end gap-4">
+      <div className="flex flex-col sm:flex-row justify-end gap-4">
         <Button
           type="button"
           variant="outline"
           onClick={() => router.back()}
           disabled={loading}
+          className="w-full sm:w-auto"
         >
           Cancel
         </Button>
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" disabled={loading} className="w-full sm:w-auto">
           {loading ? "Saving..." : submitLabel}
         </Button>
       </div>

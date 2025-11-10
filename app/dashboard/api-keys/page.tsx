@@ -93,8 +93,8 @@ export default function ApiKeysPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight">API Keys</h2>
-        <p className="text-muted-foreground">
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">API Keys</h2>
+        <p className="text-sm md:text-base text-muted-foreground">
           Generate API keys to connect Claude Code to your snippet vault via MCP
         </p>
       </div>
@@ -151,7 +151,7 @@ export default function ApiKeysPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1">
               <Label htmlFor="keyName">Key Name</Label>
               <Input
@@ -167,7 +167,7 @@ export default function ApiKeysPage() {
               />
             </div>
             <div className="flex items-end">
-              <Button onClick={createKey} disabled={creating}>
+              <Button onClick={createKey} disabled={creating} className="w-full sm:w-auto">
                 <Plus className="mr-2 h-4 w-4" />
                 {creating ? "Creating..." : "Create Key"}
               </Button>
@@ -195,22 +195,22 @@ export default function ApiKeysPage() {
               {keys.map((key) => (
                 <div
                   key={key.id}
-                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors"
                 >
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3">
-                      <Key className="h-4 w-4 text-muted-foreground" />
-                      <div>
-                        <p className="font-medium">{key.name}</p>
-                        <p className="text-sm text-muted-foreground font-mono">
+                      <Key className="h-4 w-4 text-muted-foreground shrink-0" />
+                      <div className="min-w-0">
+                        <p className="font-medium truncate">{key.name}</p>
+                        <p className="text-sm text-muted-foreground font-mono break-all">
                           {key.key_prefix}...
                         </p>
                       </div>
                     </div>
-                    <div className="mt-2 text-xs text-muted-foreground">
+                    <div className="mt-2 text-xs text-muted-foreground flex flex-col sm:flex-row gap-1 sm:gap-4">
                       <span>Created: {new Date(key.created_at).toLocaleDateString()}</span>
                       {key.last_used_at && (
-                        <span className="ml-4">
+                        <span>
                           Last used: {new Date(key.last_used_at).toLocaleDateString()}
                         </span>
                       )}
@@ -220,7 +220,7 @@ export default function ApiKeysPage() {
                     onClick={() => deleteKey(key.id)}
                     variant="ghost"
                     size="sm"
-                    className="text-destructive hover:text-destructive"
+                    className="text-destructive hover:text-destructive sm:shrink-0 self-start sm:self-auto"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
