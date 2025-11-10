@@ -40,7 +40,7 @@ export default async function DashboardPage() {
     .gte("created_at", startOfMonth)
 
   return (
-    <div className="space-y-8">
+    <div className="max-w-7xl mx-auto space-y-8">
       <div>
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
           Welcome back, {user?.user_metadata?.display_name || "there"}!
