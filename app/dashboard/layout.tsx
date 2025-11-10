@@ -32,18 +32,18 @@ export default async function DashboardLayout({
         <Sidebar snippetCount={snippetCount || 0} />
       </div>
 
-      <div className="flex flex-1 flex-col min-w-0">
-        <header className="flex h-14 md:h-16 items-center justify-between border-b px-4 md:px-6">
+      <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
+        <header className="flex h-14 md:h-16 items-center justify-between border-b px-4 md:px-6 shrink-0">
           {/* Mobile menu button */}
-          <div className="flex items-center gap-3">
-            <div className="lg:hidden">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="lg:hidden shrink-0">
               <MobileSidebar snippetCount={snippetCount || 0} />
             </div>
             <h1 className="hidden md:block text-lg md:text-2xl font-semibold truncate">Dashboard</h1>
           </div>
           <UserMenu user={user} />
         </header>
-        <main className="flex-1 overflow-y-auto bg-background p-4 md:p-6">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-background p-4 md:p-6">
           {children}
         </main>
       </div>

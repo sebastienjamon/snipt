@@ -40,7 +40,7 @@ export default async function DashboardPage() {
     .gte("created_at", startOfMonth)
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8">
+    <div className="w-full max-w-7xl mx-auto space-y-8">
       <div>
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
           Welcome back, {user?.user_metadata?.display_name || "there"}!
@@ -50,7 +50,7 @@ export default async function DashboardPage() {
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -114,7 +114,7 @@ export default async function DashboardPage() {
         </Card>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Getting Started</CardTitle>
