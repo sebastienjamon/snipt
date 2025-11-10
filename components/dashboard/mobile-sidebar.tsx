@@ -89,7 +89,6 @@ export function MobileSidebar({ snippetCount = 0 }: MobileSidebarProps) {
           {/* Footer */}
           <div className="border-t p-4">
             <div className="rounded-lg bg-muted p-3 text-sm">
-              <p className="font-semibold mb-1">Free Plan</p>
               <p className="text-xs text-muted-foreground">
                 {snippetCount} / 50 snippets used
               </p>

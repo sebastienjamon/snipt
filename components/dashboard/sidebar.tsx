@@ -49,7 +49,6 @@ export function Sidebar({ snippetCount = 0 }: SidebarProps) {
 
       <div className="border-t p-4">
         <div className="rounded-lg bg-muted p-4 text-sm">
-          <p className="font-semibold mb-1">Free Plan</p>
           <p className="text-xs text-muted-foreground">
             {snippetCount} / 50 snippets used
           </p>
