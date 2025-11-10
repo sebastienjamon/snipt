@@ -91,7 +91,7 @@ export default function SettingsPage() {
       // Create a unique filename
       const fileExt = file.name.split(".").pop()
       const fileName = `${user?.id}-${Date.now()}.${fileExt}`
-      const filePath = `avatars/${fileName}`
+      const filePath = fileName
 
       // Upload to Supabase Storage
       const { error: uploadError } = await supabase.storage
