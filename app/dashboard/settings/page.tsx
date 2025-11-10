@@ -7,10 +7,20 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { User, Upload, Loader2 } from "lucide-react"
+import { Upload, Loader2 } from "lucide-react"
+
+type UserData = {
+  id: string
+  email?: string
+  created_at?: string
+  user_metadata?: {
+    display_name?: string
+    avatar_url?: string
+  }
+}
 
 export default function SettingsPage() {
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<UserData | null>(null)
   const [displayName, setDisplayName] = useState("")
   const [avatarUrl, setAvatarUrl] = useState("")
   const [loading, setLoading] = useState(true)
@@ -102,8 +112,9 @@ export default function SettingsPage() {
 
       setAvatarUrl(data.publicUrl)
       setMessage({ type: "success", text: "Image uploaded! Click Save to update your profile." })
-    } catch (error: any) {
-      setMessage({ type: "error", text: error.message || "Failed to upload image" })
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to upload image"
+      setMessage({ type: "error", text: errorMessage })
     } finally {
       setUploading(false)
     }

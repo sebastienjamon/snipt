@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { LogOut, User as UserIcon, Settings } from "lucide-react"
+import { LogOut } from "lucide-react"
 import { signOut } from "@/app/(auth)/actions"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
