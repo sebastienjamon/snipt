@@ -1,36 +1,50 @@
 "use client"
 
-import { LogOut, User as UserIcon } from "lucide-react"
+import Link from "next/link"
+import { LogOut, User as UserIcon, Settings } from "lucide-react"
 import { signOut } from "@/app/(auth)/actions"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 type User = {
   email?: string
   user_metadata?: {
     display_name?: string
+    avatar_url?: string
   }
 }
 
 export function UserMenu({ user }: { user: User }) {
   const displayName = user.user_metadata?.display_name || user.email?.split("@")[0] || "User"
+  const avatarUrl = user.user_metadata?.avatar_url
+  const initials = displayName
+    .split(" ")
+    .map(n => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2)
 
   return (
-    <div className="flex items-center space-x-4">
-      <div className="flex items-center space-x-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-          <UserIcon className="h-4 w-4" />
-        </div>
-        <div className="flex flex-col">
+    <div className="flex items-center gap-2">
+      <Link href="/dashboard/settings" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+        <Avatar className="h-8 w-8">
+          <AvatarImage src={avatarUrl} alt={displayName} />
+          <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+            {initials}
+          </AvatarFallback>
+        </Avatar>
+        <div className="hidden md:flex flex-col">
           <span className="text-sm font-medium">{displayName}</span>
           <span className="text-xs text-muted-foreground">{user.email}</span>
         </div>
-      </div>
+      </Link>
       <form action={signOut}>
         <button
           type="submit"
-          className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+          className="flex items-center gap-2 rounded-lg p-2 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+          title="Sign out"
         >
           <LogOut className="h-4 w-4" />
-          <span>Sign out</span>
+          <span className="hidden md:inline">Sign out</span>
         </button>
       </form>
     </div>
