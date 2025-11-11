@@ -231,7 +231,129 @@ export default function ApiKeysPage() {
         </CardContent>
       </Card>
 
-      {/* Setup Instructions */}
+      {/* ChatGPT Integration */}
+      <Card className="border-2 border-primary/20">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <span className="text-2xl">🤖</span>
+            Use with ChatGPT (No API Key Required!)
+          </CardTitle>
+          <CardDescription>
+            Connect your snippets to ChatGPT using OAuth - no API key needed!
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Video Tutorial */}
+          <div className="space-y-2">
+            <h3 className="text-sm font-semibold">📹 Video Tutorial</h3>
+            <div className="aspect-video w-full overflow-hidden rounded-lg border bg-muted">
+              <video
+                controls
+                className="h-full w-full object-contain"
+                poster="/chatgpt-mcp.png"
+              >
+                <source src="/chatgpt-mcp-edit-2.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+
+          {/* Step-by-step Instructions */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold">Setup Instructions</h3>
+            <div className="flex gap-3">
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground font-semibold">
+                1
+              </div>
+              <div>
+                <p className="font-medium">Go to ChatGPT Apps</p>
+                <a
+                  href="https://chatgpt.com/settings/apps"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-primary hover:underline"
+                >
+                  https://chatgpt.com/settings/apps
+                </a>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground font-semibold">
+                2
+              </div>
+              <div>
+                <p className="font-medium">Create a new App</p>
+                <p className="text-sm text-muted-foreground">
+                  Click &quot;Create New App&quot; and fill in the details:
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground font-semibold">
+                3
+              </div>
+              <div className="space-y-2">
+                <p className="font-medium">Configure the App</p>
+                <div className="text-sm space-y-1 pl-4 border-l-2">
+                  <p><span className="font-medium">Name:</span> Snipt Code Snippets</p>
+                  <p><span className="font-medium">Description:</span> Search and manage code snippets with context</p>
+                  <p><span className="font-medium">MCP Server URL:</span></p>
+                  <code className="text-xs bg-muted px-2 py-1 rounded block mt-1">
+                    https://snipt-mcp.fly.dev/mcp
+                  </code>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground font-semibold">
+                4
+              </div>
+              <div>
+                <p className="font-medium">Sign in with Snipt</p>
+                <p className="text-sm text-muted-foreground">
+                  ChatGPT will automatically detect OAuth and prompt you to sign in with your Snipt account
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground font-semibold">
+                5
+              </div>
+              <div>
+                <p className="font-medium">Start using it!</p>
+                <p className="text-sm text-muted-foreground">
+                  Ask ChatGPT to search your snippets, save new ones, or update existing ones
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Configuration Screenshot */}
+          <div className="space-y-2">
+            <h3 className="text-sm font-semibold">Configuration Example</h3>
+            <div className="border rounded-lg overflow-hidden bg-muted">
+              <img
+                src="/chatgpt-mcp.png"
+                alt="ChatGPT MCP Configuration"
+                className="w-full h-auto"
+              />
+            </div>
+          </div>
+
+          <div className="p-4 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg">
+            <p className="text-sm text-green-800 dark:text-green-200">
+              ✨ <strong>No API key needed!</strong> ChatGPT uses OAuth to securely access your snippets.
+              You&apos;ll sign in with your Snipt account during setup.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Setup Instructions for Claude Code */}
       <Card>
         <CardHeader>
           <CardTitle>How to Use with Claude Code</CardTitle>
