@@ -231,12 +231,82 @@ export default function ApiKeysPage() {
         </CardContent>
       </Card>
 
+      {/* Setup Instructions for Claude Code */}
+      <Card>
+        <CardHeader>
+          <CardTitle>How to Use with Claude Code</CardTitle>
+          <CardDescription>
+            Follow these steps to connect your snippet vault to Claude Code
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-3">
+            <div className="flex gap-3">
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground font-semibold">
+                1
+              </div>
+              <div>
+                <p className="font-medium">Install the MCP server</p>
+                <code className="text-sm bg-muted px-2 py-1 rounded mt-1 block">
+                  npm install -g @snipt/mcp-server
+                </code>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground font-semibold">
+                2
+              </div>
+              <div>
+                <p className="font-medium">Create an API key above</p>
+                <p className="text-sm text-muted-foreground">
+                  Copy the key when it&apos;s generated
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground font-semibold">
+                3
+              </div>
+              <div>
+                <p className="font-medium">Configure Claude Code</p>
+                <code className="text-sm bg-muted px-2 py-1 rounded mt-1 block">
+                  claude mcp add snipt -e SNIPT_API_KEY=your_key_here -- snipt-mcp
+                </code>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground font-semibold">
+                4
+              </div>
+              <div>
+                <p className="font-medium">Start using it!</p>
+                <p className="text-sm text-muted-foreground">
+                  Claude Code can now search and save snippets automatically
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-4 p-4 bg-muted rounded-lg">
+            <p className="text-sm text-muted-foreground">
+              📖 For detailed setup instructions, see the{" "}
+              <a href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                MCP Setup Guide
+              </a>
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* ChatGPT Integration */}
       <Card className="border-2 border-primary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <span className="text-2xl">🤖</span>
-            Use with ChatGPT (No API Key Required!)
+            snipt.app with ChatGPT
           </CardTitle>
           <CardDescription>
             Connect your snippets to ChatGPT using OAuth - no API key needed!
@@ -244,23 +314,19 @@ export default function ApiKeysPage() {
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Video Tutorial */}
-          <div className="space-y-2">
-            <h3 className="text-sm font-semibold">📹 Video Tutorial</h3>
-            <div className="aspect-video w-full overflow-hidden rounded-lg border bg-muted">
-              <video
-                controls
-                className="h-full w-full object-contain"
-                poster="/chatgpt-mcp.png"
-              >
-                <source src="/chatgpt-mcp-edit-2.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </div>
+          <div className="aspect-video w-full overflow-hidden rounded-lg border bg-muted">
+            <video
+              controls
+              className="h-full w-full object-contain"
+              poster="/chatgpt-mcp.png"
+            >
+              <source src="/chatgpt-mcp-edit-2.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </div>
 
           {/* Step-by-step Instructions */}
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold">Setup Instructions</h3>
             <div className="flex gap-3">
               <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground font-semibold">
                 1
@@ -332,92 +398,10 @@ export default function ApiKeysPage() {
             </div>
           </div>
 
-          {/* Configuration Screenshot */}
-          <div className="space-y-2">
-            <h3 className="text-sm font-semibold">Configuration Example</h3>
-            <div className="border rounded-lg overflow-hidden bg-muted">
-              <img
-                src="/chatgpt-mcp.png"
-                alt="ChatGPT MCP Configuration"
-                className="w-full h-auto"
-              />
-            </div>
-          </div>
-
           <div className="p-4 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg">
             <p className="text-sm text-green-800 dark:text-green-200">
               ✨ <strong>No API key needed!</strong> ChatGPT uses OAuth to securely access your snippets.
               You&apos;ll sign in with your Snipt account during setup.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Setup Instructions for Claude Code */}
-      <Card>
-        <CardHeader>
-          <CardTitle>How to Use with Claude Code</CardTitle>
-          <CardDescription>
-            Follow these steps to connect your snippet vault to Claude Code
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-3">
-            <div className="flex gap-3">
-              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground font-semibold">
-                1
-              </div>
-              <div>
-                <p className="font-medium">Install the MCP server</p>
-                <code className="text-sm bg-muted px-2 py-1 rounded mt-1 block">
-                  npm install -g @snipt/mcp-server
-                </code>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground font-semibold">
-                2
-              </div>
-              <div>
-                <p className="font-medium">Create an API key above</p>
-                <p className="text-sm text-muted-foreground">
-                  Copy the key when it&apos;s generated
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground font-semibold">
-                3
-              </div>
-              <div>
-                <p className="font-medium">Configure Claude Code</p>
-                <code className="text-sm bg-muted px-2 py-1 rounded mt-1 block">
-                  claude mcp add snipt -e SNIPT_API_KEY=your_key_here -- snipt-mcp
-                </code>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground font-semibold">
-                4
-              </div>
-              <div>
-                <p className="font-medium">Start using it!</p>
-                <p className="text-sm text-muted-foreground">
-                  Claude Code can now search and save snippets automatically
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 p-4 bg-muted rounded-lg">
-            <p className="text-sm text-muted-foreground">
-              📖 For detailed setup instructions, see the{" "}
-              <a href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                MCP Setup Guide
-              </a>
             </p>
           </div>
         </CardContent>
