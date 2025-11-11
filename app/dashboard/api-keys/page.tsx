@@ -304,9 +304,8 @@ export default function ApiKeysPage() {
       {/* ChatGPT Integration */}
       <Card className="border-2 border-primary/20">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <span className="text-2xl">🤖</span>
-            snipt.app with ChatGPT
+          <CardTitle>
+            Connect ChatGPT to Snipt.app
           </CardTitle>
           <CardDescription>
             Connect your snippets to ChatGPT using OAuth - no API key needed!
@@ -318,7 +317,7 @@ export default function ApiKeysPage() {
             <video
               controls
               className="h-full w-full object-contain"
-              poster="/chatgpt-mcp.png"
+              poster="/chatgpt-snipt.png"
             >
               <source src="/chatgpt-mcp-edit-2.mp4" type="video/mp4" />
               Your browser does not support the video tag.
@@ -400,7 +399,7 @@ export default function ApiKeysPage() {
 
           <div className="p-4 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg">
             <p className="text-sm text-green-800 dark:text-green-200">
-              ✨ <strong>No API key needed!</strong> ChatGPT uses OAuth to securely access your snippets.
+              ChatGPT uses OAuth to securely access your snippets.
               You&apos;ll sign in with your Snipt account during setup.
             </p>
           </div>
