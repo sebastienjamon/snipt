@@ -53,9 +53,41 @@ export async function validateApiKey(
   return { valid: false }
 }
 
+async function verifySupabaseJWT(
+  token: string
+): Promise<{ userId: string } | null> {
+  try {
+    // Use Supabase to verify the JWT token
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false,
+        },
+      }
+    )
+
+    // Get user info using the provided token
+    const { data: { user }, error } = await supabase.auth.getUser(token)
+
+    if (error || !user) {
+      console.log("[JWT Auth] Token verification failed:", error?.message)
+      return null
+    }
+
+    console.log("[JWT Auth] Token verified for user:", user.id)
+    return { userId: user.id }
+  } catch (error) {
+    console.error("[JWT Auth] Error verifying token:", error)
+    return null
+  }
+}
+
 export async function getUserFromRequest(
   request: Request
-): Promise<{ user: User; source: "session" | "api_key" } | null> {
+): Promise<{ user: User; source: "session" | "api_key" | "jwt" } | null> {
   const { createClient: createServerClient } = await import(
     "@/lib/supabase/server"
   )
@@ -70,35 +102,68 @@ export async function getUserFromRequest(
     return { user, source: "session" }
   }
 
-  // Try API key authentication
+  // Try Bearer token authentication (API key or JWT)
   const authHeader = request.headers.get("authorization")
   if (authHeader?.startsWith("Bearer ")) {
-    const apiKey = authHeader.substring(7)
-    const { valid, userId } = await validateApiKey(apiKey)
+    const token = authHeader.substring(7)
 
-    if (valid && userId) {
-      // Use service role to fetch user data (bypass RLS)
-      const serviceSupabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!,
-        {
-          auth: {
-            autoRefreshToken: false,
-            persistSession: false,
-          },
+    // Check if it's an API key (starts with snip_) or a JWT
+    if (token.startsWith("snip_")) {
+      // API key authentication
+      const { valid, userId } = await validateApiKey(token)
+
+      if (valid && userId) {
+        // Use service role to fetch user data (bypass RLS)
+        const serviceSupabase = createClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.SUPABASE_SERVICE_ROLE_KEY!,
+          {
+            auth: {
+              autoRefreshToken: false,
+              persistSession: false,
+            },
+          }
+        )
+
+        const { data: userData } = await serviceSupabase
+          .from("users")
+          .select("*")
+          .eq("id", userId)
+          .single()
+
+        if (userData) {
+          return {
+            user: { id: userId, ...userData } as User,
+            source: "api_key",
+          }
         }
-      )
+      }
+    } else {
+      // Try JWT authentication
+      const jwtResult = await verifySupabaseJWT(token)
 
-      const { data: userData } = await serviceSupabase
-        .from("users")
-        .select("*")
-        .eq("id", userId)
-        .single()
+      if (jwtResult) {
+        // Use service role to fetch user data (bypass RLS)
+        const serviceSupabase = createClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.SUPABASE_SERVICE_ROLE_KEY!,
+          {
+            auth: {
+              autoRefreshToken: false,
+              persistSession: false,
+            },
+          }
+        )
 
-      if (userData) {
-        return {
-          user: { id: userId, ...userData },
-          source: "api_key",
+        const { data: userData } = await serviceSupabase.auth.admin.getUserById(
+          jwtResult.userId
+        )
+
+        if (userData.user) {
+          return {
+            user: userData.user,
+            source: "jwt",
+          }
         }
       }
     }

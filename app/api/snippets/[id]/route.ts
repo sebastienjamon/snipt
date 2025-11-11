@@ -16,9 +16,9 @@ export async function GET(
 
   const { user, source } = auth
 
-  // Use service role client for API key auth to bypass RLS
+  // Use service role client for API key and JWT auth to bypass RLS
   const supabase =
-    source === "api_key"
+    source === "api_key" || source === "jwt"
       ? createClient(
           process.env.NEXT_PUBLIC_SUPABASE_URL!,
           process.env.SUPABASE_SERVICE_ROLE_KEY!,
@@ -57,9 +57,9 @@ export async function PATCH(
 
   const { user, source } = auth
 
-  // Use service role client for API key auth to bypass RLS
+  // Use service role client for API key and JWT auth to bypass RLS
   const supabase =
-    source === "api_key"
+    source === "api_key" || source === "jwt"
       ? createClient(
           process.env.NEXT_PUBLIC_SUPABASE_URL!,
           process.env.SUPABASE_SERVICE_ROLE_KEY!,
@@ -115,9 +115,9 @@ export async function DELETE(
 
   const { user, source } = auth
 
-  // Use service role client for API key auth to bypass RLS
+  // Use service role client for API key and JWT auth to bypass RLS
   const supabase =
-    source === "api_key"
+    source === "api_key" || source === "jwt"
       ? createClient(
           process.env.NEXT_PUBLIC_SUPABASE_URL!,
           process.env.SUPABASE_SERVICE_ROLE_KEY!,
