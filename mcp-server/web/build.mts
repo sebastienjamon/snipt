@@ -78,28 +78,30 @@ for (const file of entries) {
 
   await build(createConfig());
 
-  // Create standalone HTML file
-  // Use absolute URLs for production, relative for local dev
-  const baseUrl = process.env.WIDGET_URL || "";
-  const cssPath = baseUrl ? `${baseUrl}/${name}.css` : `./${name}.css`;
-  const jsPath = baseUrl ? `${baseUrl}/${name}.js` : `./${name}.js`;
+  // Read the generated CSS and JS files
+  const cssFilePath = path.join(outDir, `${name}.css`);
+  const jsFilePath = path.join(outDir, `${name}.js`);
 
+  const cssContent = fs.existsSync(cssFilePath) ? fs.readFileSync(cssFilePath, "utf-8") : "";
+  const jsContent = fs.readFileSync(jsFilePath, "utf-8");
+
+  // Create standalone HTML file with inlined CSS and JS (for ChatGPT sandbox compatibility)
   const htmlContent = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${name}</title>
-  <link rel="stylesheet" href="${cssPath}">
+  <style>${cssContent}</style>
 </head>
 <body>
   <div id="root"></div>
-  <script type="module" src="${jsPath}"></script>
+  <script type="module">${jsContent}</script>
 </body>
 </html>`;
 
   fs.writeFileSync(path.join(outDir, `${name}.html`), htmlContent);
-  console.log(`✓ Built ${name}.html\n`);
+  console.log(`✓ Built ${name}.html (self-contained with inlined assets)\n`);
 }
 
 console.log("Build complete!");
