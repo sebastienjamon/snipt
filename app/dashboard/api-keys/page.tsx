@@ -248,7 +248,7 @@ export default function ApiKeysPage() {
               <div>
                 <p className="font-medium">Install the MCP server</p>
                 <code className="text-sm bg-muted px-2 py-1 rounded mt-1 block">
-                  npm install -g @snipt/mcp-server
+                  npm install -g snipt-mcp-server
                 </code>
               </div>
             </div>
@@ -272,7 +272,7 @@ export default function ApiKeysPage() {
               <div>
                 <p className="font-medium">Configure Claude Code</p>
                 <code className="text-sm bg-muted px-2 py-1 rounded mt-1 block">
-                  claude mcp add snipt -e SNIPT_API_KEY=your_key_here -- snipt-mcp
+                  claude mcp add snipt -e SNIPT_API_KEY=your_key_here -e SNIPT_API_URL=https://snipt.app -- snipt-mcp
                 </code>
               </div>
             </div>

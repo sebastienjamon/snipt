@@ -33,7 +33,7 @@ For local development:
 claude mcp add snipt \
   -e SNIPT_API_KEY=snip_your_key_here \
   -e SNIPT_API_URL=http://localhost:3000 \
-  -- /Users/sjamon/Documents/snipt.it/mcp-server/dist/index.js
+  -- /Users/sjamon/Documents/snipt/mcp-server/dist/index.js
 ```
 
 Replace the path with your actual project path.
@@ -68,18 +68,25 @@ echo '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"search_sni
 
 Once you deploy Snipt to production:
 
-1. Publish the MCP server to npm (optional):
+1. Install the MCP server from npm:
    ```bash
-   cd mcp-server
-   npm publish --access public
+   npm install -g snipt-mcp-server
    ```
 
 2. Configure Claude Code to use production:
    ```bash
    claude mcp add snipt \
      -e SNIPT_API_KEY=snip_your_production_key \
-     -e SNIPT_API_URL=https://snipt.it \
-     -- npx @snipt/mcp-server
+     -e SNIPT_API_URL=https://snipt.app \
+     -- snipt-mcp
+   ```
+
+   Or use npx without installing:
+   ```bash
+   claude mcp add snipt \
+     -e SNIPT_API_KEY=snip_your_production_key \
+     -e SNIPT_API_URL=https://snipt.app \
+     -- npx snipt-mcp-server
    ```
 
 ## Common Issues

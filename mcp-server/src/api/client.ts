@@ -11,7 +11,7 @@ export class SniptApiClient {
   private apiKey: string
   private baseUrl: string
 
-  constructor(apiKey: string, baseUrl: string = "https://snipt.it") {
+  constructor(apiKey: string, baseUrl: string = "https://snipt.app") {
     this.apiKey = apiKey
     this.baseUrl = baseUrl.replace(/\/$/, "") // Remove trailing slash
   }
@@ -39,15 +39,30 @@ export class SniptApiClient {
       "Content-Type": "application/json",
     }
 
+    // Debug logging
+    console.log(`API Request: ${method} ${url.toString()}`)
+    console.log(`Token: ${this.apiKey.substring(0, 10)}...${this.apiKey.substring(this.apiKey.length - 10)}`)
+
     const response = await fetch(url.toString(), {
       method,
       headers,
       body: body ? JSON.stringify(body) : undefined,
     })
 
+    console.log(`API Response: ${response.status} ${response.statusText}`)
+
     if (!response.ok) {
-      const error = (await response.json()) as ApiError
-      throw new Error(error.error || `HTTP ${response.status}`)
+      let errorMsg = `HTTP ${response.status}`
+      try {
+        const error = (await response.json()) as ApiError
+        errorMsg = error.error || errorMsg
+        console.log(`API Error: ${JSON.stringify(error)}`)
+      } catch (e) {
+        const text = await response.text()
+        console.log(`API Error (text): ${text}`)
+        errorMsg = text || errorMsg
+      }
+      throw new Error(errorMsg)
     }
 
     return (await response.json()) as T

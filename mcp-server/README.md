@@ -15,10 +15,10 @@ Think of it as giving Claude Code access to your personal knowledge base of comm
 
 ## Installation
 
-### Option 1: From npm (Recommended - Coming Soon)
+### Option 1: From npm (Recommended)
 
 ```bash
-npm install -g @snipt/mcp-server
+npm install -g snipt-mcp-server
 ```
 
 ### Option 2: From Source (For Development)
@@ -44,19 +44,19 @@ npm link
 
 ### Step 1: Get Your API Key
 
-1. Go to https://snipt.it/dashboard/api-keys (or http://localhost:3000/dashboard/api-keys for local dev)
+1. Go to https://snipt.app/dashboard/api-keys (or http://localhost:3000/dashboard/api-keys for local dev)
 2. Click "Create API Key"
 3. Give it a name like "Claude Code"
 4. **Copy the full key** (starts with `snip_`) - it's only shown once!
 
 ### Step 2: Configure Claude Code
 
-#### For Production (snipt.it)
+#### For Production (snipt.app)
 
 ```bash
 claude mcp add snipt \
   -e SNIPT_API_KEY=snip_your_key_here \
-  -e SNIPT_API_URL=https://snipt.it \
+  -e SNIPT_API_URL=https://snipt.app \
   -- snipt-mcp
 ```
 
@@ -74,8 +74,8 @@ claude mcp add snipt \
 ```bash
 claude mcp add snipt \
   -e SNIPT_API_KEY=snip_your_key_here \
-  -e SNIPT_API_URL=https://snipt.it \
-  -- npx @snipt/mcp-server
+  -e SNIPT_API_URL=https://snipt.app \
+  -- npx snipt-mcp-server
 ```
 
 ### Step 3: Verify Installation
@@ -170,7 +170,7 @@ Update any field of an existing snippet, including marking it as successful/unsu
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `SNIPT_API_KEY` | ✅ Yes | - | Your Snipt API key (get from dashboard) |
-| `SNIPT_API_URL` | No | `https://snipt.it` | API base URL (use `http://localhost:3000` for local dev) |
+| `SNIPT_API_URL` | No | `https://snipt.app` | API base URL (use `http://localhost:3000` for local dev) |
 
 ### Troubleshooting
 

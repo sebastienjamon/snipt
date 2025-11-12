@@ -15,7 +15,7 @@ import type {
 
 // Get configuration from environment variables
 const SNIPT_API_KEY = process.env.SNIPT_API_KEY
-const SNIPT_API_URL = process.env.SNIPT_API_URL || "https://snipt.it"
+const SNIPT_API_URL = process.env.SNIPT_API_URL || "https://snipt.app"
 
 if (!SNIPT_API_KEY) {
   console.error("Error: SNIPT_API_KEY environment variable is required")

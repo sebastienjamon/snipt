@@ -1,15 +1,17 @@
 {
-  "name": "@snipt/mcp-server",
-  "version": "1.0.0",
+  "name": "snipt-mcp-server",
+  "version": "1.0.1",
   "description": "MCP server for Snipt - enables Claude Code to search and save code snippets",
   "main": "dist/index.js",
   "bin": {
-    "snipt-mcp": "dist/index.js"
+    "snipt-mcp": "dist/index.js",
+    "snipt-mcp-http": "dist/http-server.js"
   },
   "type": "module",
   "scripts": {
-    "build": "tsc && chmod +x dist/index.js",
+    "build": "tsc && chmod +x dist/index.js && chmod +x dist/http-server.js",
     "dev": "tsc --watch",
+    "start:http": "node dist/http-server.js",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -23,10 +25,16 @@
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.4",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.3.2",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/node": "^22.8.6",
+    "@types/react": "^19.2.3",
+    "@types/react-dom": "^19.2.2",
+    "esbuild": "^0.27.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "typescript": "^5.6.3"
   },
   "engines": {
