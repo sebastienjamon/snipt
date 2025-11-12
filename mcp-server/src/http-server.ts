@@ -959,18 +959,21 @@ async function main() {
       "snippet-list-widget",
       "ui://widget/snippet-list.html",
       {},
-      async () => ({
-        contents: [
-          {
-            uri: "ui://widget/snippet-list.html",
-            mimeType: "text/html+skybridge",
-            text: widgetHtml,
-            _meta: {}
-          }
-        ]
-      })
+      async () => {
+        console.error("📦 Widget resource requested: ui://widget/snippet-list.html")
+        return {
+          contents: [
+            {
+              uri: "ui://widget/snippet-list.html",
+              mimeType: "text/html+skybridge",
+              text: widgetHtml,
+              _meta: {}
+            }
+          ]
+        }
+      }
     )
-    console.error("✓ Registered snippet-list widget resource")
+    console.error("✓ Registered snippet-list widget resource (ui://widget/snippet-list.html)")
   } catch (error) {
     console.error(`Warning: Could not load widget HTML from ${widgetHtmlPath}:`, error)
     console.error("Widget will not be available in ChatGPT")
