@@ -57,16 +57,13 @@ const authorizationCodes = new Map<string, {
 const requestAuthContext = new WeakMap<any, AuthContext | null>()
 
 // Note: Widget UI is now built with React in the web/ directory
-// The widget is served from localhost:4444 after running `pnpm build && pnpm serve` in web/
+// The widget HTML is registered as an MCP resource for ChatGPT
 
 // Create MCP server
 const server = new McpServer({
   name: "snipt-http",
   version: "1.0.0",
 })
-
-// Widget URL (served from web/assets directory)
-const WIDGET_BASE_URL = process.env.WIDGET_URL || "http://localhost:4444"
 
 // Current request reference (set during MCP request handling)
 let currentRequest: any = null
@@ -235,7 +232,7 @@ server.registerTool(
       security: [{ type: "oauth2", scopes: ["snippets:read"] }]
     } : undefined,
     _meta: {
-      "openai/outputTemplate": `${WIDGET_BASE_URL}/snippet-list.html`,
+      "openai/outputTemplate": "ui://widget/snippet-list.html",
       "openai/toolInvocation/invoking": "Searching snippets...",
       "openai/toolInvocation/invoked": "Found snippets",
       "openai/widgetAccessible": true,
@@ -951,6 +948,34 @@ const httpServer = createServer(async (req, res) => {
 
 // Start server
 async function main() {
+  // Load widget HTML and register as MCP resource
+  const widgetHtmlPath = join(__dirname, "..", "web", "assets", "snippet-list.html")
+  try {
+    const widgetHtml = await readFile(widgetHtmlPath, "utf-8")
+    console.error(`✓ Loaded widget HTML from ${widgetHtmlPath}`)
+
+    // Register widget as MCP resource (for ChatGPT)
+    server.registerResource(
+      "snippet-list-widget",
+      "ui://widget/snippet-list.html",
+      {},
+      async () => ({
+        contents: [
+          {
+            uri: "ui://widget/snippet-list.html",
+            mimeType: "text/html+skybridge",
+            text: widgetHtml,
+            _meta: {}
+          }
+        ]
+      })
+    )
+    console.error("✓ Registered snippet-list widget resource")
+  } catch (error) {
+    console.error(`Warning: Could not load widget HTML from ${widgetHtmlPath}:`, error)
+    console.error("Widget will not be available in ChatGPT")
+  }
+
   httpServer.listen(PORT, () => {
     console.error(`Snipt MCP HTTP Server running on http://localhost:${PORT}`)
     console.error(`MCP endpoint: http://localhost:${PORT}/mcp`)
