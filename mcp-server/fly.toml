@@ -12,6 +12,7 @@ primary_region = 'sjc'
 [env]
   PORT = "3001"
   SNIPT_API_URL = "https://snipt.app"
+  WIDGET_URL = "https://snipt-mcp.fly.dev"
 
 [http_service]
   internal_port = 3001

@@ -2,6 +2,9 @@
 
 import { createServer } from "http"
 import { AsyncLocalStorage } from "async_hooks"
+import { readFile } from "fs/promises"
+import { join, dirname } from "path"
+import { fileURLToPath } from "url"
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js"
 import { z } from "zod"
@@ -12,6 +15,10 @@ import type {
   SnippetCreateParams,
   SnippetUpdateParams,
 } from "./types/index.js"
+
+// Get current directory (for serving static assets)
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 // Create AsyncLocalStorage for tracking auth context across async operations
 const authStorage = new AsyncLocalStorage<AuthContext | null>()
@@ -49,213 +56,8 @@ const authorizationCodes = new Map<string, {
 // Store auth context for current request (thread-safe per request)
 const requestAuthContext = new WeakMap<any, AuthContext | null>()
 
-// Simple snippet list widget for ChatGPT
-const sniptWidgetHTML = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Snippets</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      padding: 12px;
-      background: var(--bg-color, #ffffff);
-      color: var(--text-color, #111827);
-    }
-
-    body.dark {
-      --bg-color: #1f2937;
-      --text-color: #f3f4f6;
-      --card-bg: #374151;
-      --card-hover: #4b5563;
-      --border-color: #4b5563;
-      --meta-color: #9ca3af;
-    }
-
-    body.light {
-      --bg-color: #ffffff;
-      --text-color: #111827;
-      --card-bg: #f9fafb;
-      --card-hover: #f3f4f6;
-      --border-color: #e5e7eb;
-      --meta-color: #6b7280;
-    }
-
-    .snippet-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .snippet-item {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 12px;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .snippet-item:hover {
-      background: var(--card-hover);
-      border-color: #3b82f6;
-    }
-
-    .snippet-item:active {
-      transform: scale(0.99);
-    }
-
-    .snippet-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .snippet-meta {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      font-size: 11px;
-      color: var(--meta-color);
-      margin-bottom: 8px;
-    }
-
-    .language-badge {
-      background: #dbeafe;
-      color: #1e40af;
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-weight: 500;
-    }
-
-    .snippet-code {
-      background: #1f2937;
-      border-radius: 4px;
-      padding: 8px;
-      font-family: 'SF Mono', Monaco, monospace;
-      font-size: 11px;
-      color: #e5e7eb;
-      overflow-x: auto;
-      max-height: 120px;
-      overflow-y: auto;
-      white-space: pre;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 24px;
-      color: var(--meta-color);
-    }
-
-    .copy-toast {
-      position: fixed;
-      top: 16px;
-      right: 16px;
-      background: #10b981;
-      color: white;
-      padding: 8px 12px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 500;
-      opacity: 0;
-      transition: opacity 0.2s;
-      pointer-events: none;
-      z-index: 1000;
-    }
-
-    .copy-toast.show {
-      opacity: 1;
-    }
-  </style>
-</head>
-<body>
-  <div id="copyToast" class="copy-toast">✓ Copied!</div>
-  <div id="root"></div>
-
-  <script>
-    // Get data from window.openai (ChatGPT provides this)
-    function getSnippets() {
-      if (window.openai?.toolOutput?.structuredContent?.snippets) {
-        return window.openai.toolOutput.structuredContent.snippets;
-      }
-      return [];
-    }
-
-    // Apply theme from ChatGPT
-    function applyTheme() {
-      const theme = window.openai?.theme || 'light';
-      document.body.className = theme;
-    }
-
-    // Escape HTML
-    function escapeHtml(text) {
-      if (!text) return '';
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    // Copy to clipboard and show toast
-    async function copySnippet(code) {
-      try {
-        await navigator.clipboard.writeText(code);
-        const toast = document.getElementById('copyToast');
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 1500);
-      } catch (err) {
-        console.error('Copy failed:', err);
-      }
-    }
-
-    // Render snippets
-    function render() {
-      applyTheme();
-      const snippets = getSnippets();
-      const root = document.getElementById('root');
-
-      if (snippets.length === 0) {
-        root.innerHTML = \`
-          <div class="empty-state">
-            <div style="font-size: 32px; margin-bottom: 8px; opacity: 0.5;">📝</div>
-            <p>No snippets to display</p>
-          </div>
-        \`;
-        return;
-      }
-
-      root.innerHTML = \`
-        <div class="snippet-list">
-          \${snippets.map(snippet => \`
-            <div class="snippet-item" onclick="copySnippet(\\\`\${escapeHtml(snippet.code)}\\\`)">
-              <div class="snippet-title">\${escapeHtml(snippet.title)}</div>
-              <div class="snippet-meta">
-                <span class="language-badge">\${escapeHtml(snippet.language)}</span>
-                \${snippet.category ? \`<span>• \${escapeHtml(snippet.category)}</span>\` : ''}
-                \${snippet.usage_count ? \`<span>• Used \${snippet.usage_count}x</span>\` : ''}
-              </div>
-              <div class="snippet-code">\${escapeHtml(snippet.code)}</div>
-            </div>
-          \`).join('')}
-        </div>
-      \`;
-    }
-
-    // Listen for ChatGPT updates
-    window.addEventListener('openai:set_globals', render);
-
-    // Initial render
-    render();
-  </script>
-</body>
-</html>
-`
+// Note: Widget UI is now built with React in the web/ directory
+// The widget is served from localhost:4444 after running `pnpm build && pnpm serve` in web/
 
 // Create MCP server
 const server = new McpServer({
@@ -263,31 +65,8 @@ const server = new McpServer({
   version: "1.0.0",
 })
 
-// Register UI resource for snippet list
-server.registerResource(
-  "snippet-list",
-  "ui://widget/snippet-list.html",
-  {
-    mimeType: "text/html+skybridge",
-    description: "Simple list of code snippets",
-    _meta: {
-      "openai/widgetPrefersBorder": true,
-      "openai/widgetDescription": "Displays a clean list of code snippets with titles, languages, and code preview. Click any snippet to copy its code."
-    }
-  },
-  async () => {
-    return {
-      contents: [{
-        uri: "ui://widget/snippet-list.html",
-        mimeType: "text/html+skybridge",
-        text: sniptWidgetHTML,
-        _meta: {
-          "openai/widgetPrefersBorder": true
-        }
-      }]
-    }
-  }
-)
+// Widget URL (served from web/assets directory)
+const WIDGET_BASE_URL = process.env.WIDGET_URL || "http://localhost:4444"
 
 // Current request reference (set during MCP request handling)
 let currentRequest: any = null
@@ -456,7 +235,7 @@ server.registerTool(
       security: [{ type: "oauth2", scopes: ["snippets:read"] }]
     } : undefined,
     _meta: {
-      "openai/outputTemplate": "ui://widget/snippet-list.html",
+      "openai/outputTemplate": `${WIDGET_BASE_URL}/snippet-list.html`,
       "openai/toolInvocation/invoking": "Searching snippets...",
       "openai/toolInvocation/invoked": "Found snippets",
       "openai/widgetAccessible": true,
@@ -1123,6 +902,31 @@ const httpServer = createServer(async (req, res) => {
     })
 
     return
+  }
+
+  // Serve widget assets
+  if (url.pathname.startsWith("/assets/") || url.pathname.match(/\.(html|js|css)$/)) {
+    try {
+      // Clean the path and resolve it relative to the dist directory
+      const cleanPath = url.pathname.startsWith("/assets/")
+        ? url.pathname.substring(8) // Remove /assets/ prefix
+        : url.pathname.substring(1)  // Remove leading /
+
+      const filePath = join(__dirname, "..", "web", "assets", cleanPath)
+      const content = await readFile(filePath)
+
+      // Determine content type
+      let contentType = "text/plain"
+      if (cleanPath.endsWith(".html")) contentType = "text/html"
+      else if (cleanPath.endsWith(".js")) contentType = "application/javascript"
+      else if (cleanPath.endsWith(".css")) contentType = "text/css"
+
+      res.writeHead(200, { ...corsHeaders, "Content-Type": contentType })
+      res.end(content)
+      return
+    } catch (error) {
+      // File not found, continue to 404
+    }
   }
 
   // Health check endpoint

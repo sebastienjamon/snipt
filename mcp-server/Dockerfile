@@ -16,6 +16,13 @@ COPY src ./src
 # Build TypeScript
 RUN npm run build
 
+# Build React widgets
+WORKDIR /app/web
+COPY web/package*.json ./
+RUN npm ci
+COPY web ./
+RUN npm run build
+
 # Production stage
 FROM node:18-alpine
 
@@ -29,6 +36,7 @@ RUN npm ci --only=production
 
 # Copy built files from builder
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/web/assets ./web/assets
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
