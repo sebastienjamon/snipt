@@ -305,25 +305,13 @@ export default function ApiKeysPage() {
       <Card className="border-2 border-primary/20">
         <CardHeader>
           <CardTitle>
-            Connect ChatGPT to Snipt.app
+            How to Use with ChatGPT
           </CardTitle>
           <CardDescription>
             Connect your snippets to ChatGPT using OAuth - no API key needed!
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Video Tutorial */}
-          <div className="aspect-video w-full overflow-hidden rounded-lg border bg-muted">
-            <video
-              controls
-              className="h-full w-full object-contain"
-              poster="/chatgpt-snipt.png"
-            >
-              <source src="/chatgpt-mcp-edit-2.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-
           {/* Step-by-step Instructions */}
           <div className="space-y-3">
             <div className="flex gap-3">
@@ -395,6 +383,18 @@ export default function ApiKeysPage() {
                 </p>
               </div>
             </div>
+          </div>
+
+          {/* Video Tutorial */}
+          <div className="aspect-video w-full overflow-hidden rounded-lg border bg-muted">
+            <video
+              controls
+              className="h-full w-full object-contain"
+              poster="/chatgpt-snipt.png"
+            >
+              <source src="/chatgpt-mcp-edit-2.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </div>
 
           <div className="p-4 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg">
