@@ -79,17 +79,22 @@ for (const file of entries) {
   await build(createConfig());
 
   // Create standalone HTML file
+  // Use absolute URLs for production, relative for local dev
+  const baseUrl = process.env.WIDGET_URL || "";
+  const cssPath = baseUrl ? `${baseUrl}/${name}.css` : `./${name}.css`;
+  const jsPath = baseUrl ? `${baseUrl}/${name}.js` : `./${name}.js`;
+
   const htmlContent = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${name}</title>
-  <link rel="stylesheet" href="./${name}.css">
+  <link rel="stylesheet" href="${cssPath}">
 </head>
 <body>
   <div id="root"></div>
-  <script type="module" src="./${name}.js"></script>
+  <script type="module" src="${jsPath}"></script>
 </body>
 </html>`;
 

@@ -1,6 +1,9 @@
 # Multi-stage build for Snipt MCP Server
 FROM node:18-alpine AS builder
 
+# Build argument for widget URL
+ARG WIDGET_URL=https://snipt-mcp.fly.dev
+
 WORKDIR /app
 
 # Copy package files
@@ -21,6 +24,7 @@ WORKDIR /app/web
 COPY web/package*.json ./
 RUN npm ci
 COPY web ./
+ENV WIDGET_URL=${WIDGET_URL}
 RUN npm run build
 
 # Production stage
