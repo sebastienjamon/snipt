@@ -116,7 +116,8 @@ export default function ApiKeysPage() {
               <Input
                 value={showNewKey}
                 readOnly
-                className="font-mono text-sm"
+                className="font-mono text-sm cursor-text"
+                onClick={(e) => e.currentTarget.select()}
               />
               <Button
                 onClick={() => copyToClipboard(showNewKey, "new")}
