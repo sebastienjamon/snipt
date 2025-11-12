@@ -8,6 +8,7 @@ import type { SnippetListOutput, Snippet } from "../types";
 function App() {
   const data = useWidgetProps<SnippetListOutput>({ snippets: [] });
   const theme = useOpenAiGlobal("theme");
+  const toolOutput = useOpenAiGlobal("toolOutput");
   const snippets = data?.snippets || [];
 
   const copyToClipboard = async (code: string, title: string) => {
@@ -20,8 +21,20 @@ function App() {
     }
   };
 
+  // Debug mode - show raw data
+  const debugMode = true;
+
   return (
     <div className={`w-full ${theme === "dark" ? "dark" : ""}`}>
+      {debugMode && (
+        <div className="bg-yellow-100 dark:bg-yellow-900 p-4 mb-4 text-xs">
+          <div className="font-bold mb-2">Debug Info:</div>
+          <div>toolOutput type: {typeof toolOutput}</div>
+          <div>toolOutput is null: {String(toolOutput === null)}</div>
+          <div>data: {JSON.stringify(data)}</div>
+          <div>snippets.length: {snippets.length}</div>
+        </div>
+      )}
       <div className="antialiased w-full text-gray-900 dark:text-gray-100 px-4 pb-3 border border-gray-200 dark:border-gray-700 rounded-2xl sm:rounded-3xl overflow-hidden bg-white dark:bg-gray-900">
         {/* Header */}
         <div className="flex flex-row items-center gap-4 border-b border-gray-100 dark:border-gray-800 py-4">
