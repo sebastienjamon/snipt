@@ -296,7 +296,7 @@ export default function SettingsPage() {
             View your account details
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label className="text-muted-foreground">Account ID</Label>
@@ -309,27 +309,11 @@ export default function SettingsPage() {
               </p>
             </div>
           </div>
-        </CardContent>
-      </Card>
 
-      <Card className="border-destructive">
-        <CardHeader>
-          <CardTitle className="text-destructive">Danger Zone</CardTitle>
-          <CardDescription>
-            Irreversible and destructive actions
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 border border-destructive/20 rounded-lg bg-destructive/5">
-            <div>
-              <h3 className="font-semibold">Delete Account</h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                Permanently delete your account and all associated data. This action cannot be undone.
-              </p>
-            </div>
+          <div className="pt-4 border-t">
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="destructive" disabled={deleting}>
+                <Button variant="outline" size="sm" disabled={deleting} className="text-muted-foreground hover:text-destructive">
                   {deleting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -345,15 +329,9 @@ export default function SettingsPage() {
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogTitle>Delete your account?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete your account and remove all your data from our servers, including:
-                    <ul className="list-disc list-inside mt-2 space-y-1">
-                      <li>All your code snippets</li>
-                      <li>Your profile information</li>
-                      <li>Your API keys</li>
-                      <li>All account settings</li>
-                    </ul>
+                    This will permanently delete your account and all associated data, including snippets, profile information, and API keys.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -362,7 +340,7 @@ export default function SettingsPage() {
                     onClick={handleDeleteAccount}
                     className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                   >
-                    Yes, delete my account
+                    Delete Account
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
