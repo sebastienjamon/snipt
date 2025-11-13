@@ -130,7 +130,7 @@ export default async function DashboardPage() {
               <div className="space-y-1">
                 <p className="text-sm font-medium">Install MCP server</p>
                 <p className="text-sm text-muted-foreground">
-                  npm install -g @snipt/mcp-server
+                  npm install -g snipt-mcp-server
                 </p>
               </div>
             </div>
