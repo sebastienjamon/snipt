@@ -310,7 +310,7 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <div className="pt-4 border-t">
+          <div className="pt-4 border-t flex justify-end">
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="outline" size="sm" disabled={deleting} className="text-muted-foreground hover:text-destructive">
