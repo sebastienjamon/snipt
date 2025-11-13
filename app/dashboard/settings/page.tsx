@@ -7,7 +7,19 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Upload, Loader2 } from "lucide-react"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { Upload, Loader2, Trash2 } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 type UserData = {
   id: string
@@ -20,12 +32,14 @@ type UserData = {
 }
 
 export default function SettingsPage() {
+  const router = useRouter()
   const [user, setUser] = useState<UserData | null>(null)
   const [displayName, setDisplayName] = useState("")
   const [avatarUrl, setAvatarUrl] = useState("")
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
 
   useEffect(() => {
@@ -117,6 +131,32 @@ export default function SettingsPage() {
       setMessage({ type: "error", text: errorMessage })
     } finally {
       setUploading(false)
+    }
+  }
+
+  async function handleDeleteAccount() {
+    setDeleting(true)
+    setMessage(null)
+
+    try {
+      const response = await fetch("/api/account/delete", {
+        method: "DELETE",
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to delete account")
+      }
+
+      // Sign out and redirect to home
+      const supabase = createClient()
+      await supabase.auth.signOut()
+      router.push("/")
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to delete account"
+      setMessage({ type: "error", text: errorMessage })
+      setDeleting(false)
     }
   }
 
@@ -268,6 +308,65 @@ export default function SettingsPage() {
                 {user?.created_at ? new Date(user.created_at).toLocaleDateString() : "Unknown"}
               </p>
             </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="border-destructive">
+        <CardHeader>
+          <CardTitle className="text-destructive">Danger Zone</CardTitle>
+          <CardDescription>
+            Irreversible and destructive actions
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 border border-destructive/20 rounded-lg bg-destructive/5">
+            <div>
+              <h3 className="font-semibold">Delete Account</h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                Permanently delete your account and all associated data. This action cannot be undone.
+              </p>
+            </div>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" disabled={deleting}>
+                  {deleting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Deleting...
+                    </>
+                  ) : (
+                    <>
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Delete Account
+                    </>
+                  )}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete your account and remove all your data from our servers, including:
+                    <ul className="list-disc list-inside mt-2 space-y-1">
+                      <li>All your code snippets</li>
+                      <li>Your profile information</li>
+                      <li>Your API keys</li>
+                      <li>All account settings</li>
+                    </ul>
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleDeleteAccount}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Yes, delete my account
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </CardContent>
       </Card>
