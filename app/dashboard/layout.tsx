@@ -25,11 +25,20 @@ export default async function DashboardLayout({
     .select("*", { count: "exact", head: true })
     .eq("user_id", user.id)
 
+  // Check if user has unlimited access
+  const { data: userData } = await supabase
+    .from("users")
+    .select("has_paid")
+    .eq("id", user.id)
+    .single()
+
+  const hasPaid = userData?.has_paid || false
+
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Desktop Sidebar */}
       <div className="hidden lg:block">
-        <Sidebar snippetCount={snippetCount || 0} />
+        <Sidebar snippetCount={snippetCount || 0} hasUnlimited={hasPaid} />
       </div>
 
       <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
@@ -37,7 +46,7 @@ export default async function DashboardLayout({
           {/* Mobile menu button */}
           <div className="flex items-center gap-3 min-w-0">
             <div className="lg:hidden shrink-0">
-              <MobileSidebar snippetCount={snippetCount || 0} />
+              <MobileSidebar snippetCount={snippetCount || 0} hasUnlimited={hasPaid} />
             </div>
             <h1 className="hidden md:block text-lg md:text-2xl font-semibold truncate">Dashboard</h1>
           </div>

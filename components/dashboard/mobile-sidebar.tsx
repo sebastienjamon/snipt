@@ -18,9 +18,10 @@ const navigation = [
 
 type MobileSidebarProps = {
   snippetCount?: number
+  hasUnlimited?: boolean
 }
 
-export function MobileSidebar({ snippetCount = 0 }: MobileSidebarProps) {
+export function MobileSidebar({ snippetCount = 0, hasUnlimited = false }: MobileSidebarProps) {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
 
@@ -91,7 +92,10 @@ export function MobileSidebar({ snippetCount = 0 }: MobileSidebarProps) {
           <div className="border-t p-4">
             <div className="rounded-lg bg-muted p-3 text-sm">
               <p className="text-xs text-muted-foreground">
-                {snippetCount} / 50 snippets used
+                {hasUnlimited
+                  ? `${snippetCount} snippets • Unlimited`
+                  : `${snippetCount} / 50 snippets used`
+                }
               </p>
             </div>
           </div>

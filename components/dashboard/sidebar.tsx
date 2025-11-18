@@ -16,9 +16,10 @@ const navigation = [
 
 type SidebarProps = {
   snippetCount?: number
+  hasUnlimited?: boolean
 }
 
-export function Sidebar({ snippetCount = 0 }: SidebarProps) {
+export function Sidebar({ snippetCount = 0, hasUnlimited = false }: SidebarProps) {
   const pathname = usePathname()
 
   return (
@@ -51,7 +52,10 @@ export function Sidebar({ snippetCount = 0 }: SidebarProps) {
       <div className="border-t p-4">
         <div className="rounded-lg bg-muted p-4 text-sm">
           <p className="text-xs text-muted-foreground">
-            {snippetCount} / 50 snippets used
+            {hasUnlimited
+              ? `${snippetCount} snippets • Unlimited`
+              : `${snippetCount} / 50 snippets used`
+            }
           </p>
         </div>
       </div>
