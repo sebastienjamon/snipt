@@ -82,13 +82,14 @@ export async function POST(request: NextRequest) {
               .eq("id", userId)
           }
 
-          // Record the payment
+          // Record the payment (pass service role client)
           await recordPayment(
             userId,
             customerId,
             paymentIntentId,
             session.id,
-            session.amount_total || 1900
+            session.amount_total || 1900,
+            supabase
           )
 
           console.log("Payment succeeded:", paymentIntentId)

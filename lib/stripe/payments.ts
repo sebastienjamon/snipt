@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
+import type { SupabaseClient } from "@supabase/supabase-js"
 
 /**
  * Record a successful payment and upgrade user to unlimited
@@ -8,9 +9,10 @@ export async function recordPayment(
   customerId: string,
   paymentIntentId: string,
   checkoutSessionId: string | null,
-  amount: number
+  amount: number,
+  supabaseClient?: SupabaseClient
 ) {
-  const supabase = await createClient()
+  const supabase = supabaseClient || await createClient()
 
   // Record payment in payments table
   const { error: paymentError } = await supabase
