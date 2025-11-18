@@ -3,6 +3,7 @@ import { createClient as createServerClient } from "@/lib/supabase/server"
 import { createClient } from "@supabase/supabase-js"
 import { snippetSchema } from "@/lib/validations/snippet"
 import { getUserFromRequest } from "@/lib/auth/api-key"
+import { canCreateSnippet } from "@/lib/usage/quota"
 
 export async function GET(request: Request) {
   // Support both session and API key authentication
@@ -106,6 +107,15 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { error: result.error.errors[0].message },
       { status: 400 }
+    )
+  }
+
+  // Check snippet quota
+  const snippetQuota = await canCreateSnippet(user.id)
+  if (!snippetQuota.allowed) {
+    return NextResponse.json(
+      { error: snippetQuota.reason, code: "QUOTA_EXCEEDED" },
+      { status: 403 }
     )
   }
 

@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Code2, Home, Settings, Key } from "lucide-react"
+import { Code2, Home, Settings, Key, CreditCard } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Logo } from "@/components/ui/logo"
 
@@ -10,6 +10,7 @@ const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
   { name: "Snippets", href: "/dashboard/snippets", icon: Code2 },
   { name: "API Keys", href: "/dashboard/api-keys", icon: Key },
+  { name: "Billing", href: "/dashboard/billing", icon: CreditCard },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ]
 
